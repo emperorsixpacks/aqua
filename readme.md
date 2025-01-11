@@ -1,7 +1,5 @@
 # LiqAI
 
-## Overview
-
 LiqAI (Liquid AI Agent Curator) is a multi-agent system designed to create, optimize, and manage decentralized finance (DeFi) strategies on the Base network through the Liquid protocol. Leveraging state-of-the-art technologies such as LangGraph, LangChain, and Pinecone, LiqAI offers a robust framework for market analysis, risk assessment, and dynamic strategy execution within the DeFi ecosystem.
 
 The system operates through a centralized supervisory agent, called the LIQ Supervisor Agent, that coordinates multiple specialized agents to analyze markets, assess risks, and execute optimal strategies. This intelligent multi-agent architecture enhances decision-making efficiency, scalability, and fault tolerance, ensuring high-performance DeFi strategy execution.
