@@ -1,0 +1,10 @@
+langchain-core
+langchain-community
+langchain-openai
+langchain
+langchain-openai
+langgraph
+pydantic>=2.7.4
+python-dotenv
+pinecone
+apscheduler
