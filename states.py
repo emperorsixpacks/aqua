@@ -7,3 +7,6 @@ class AgentState(TypedDict):
     market_analysis: dict
     risk_analysis: dict
     performance_metrics: dict
+    strategy_signals: dict
+    asset: str = "" 
+    protocol: str = "" 
