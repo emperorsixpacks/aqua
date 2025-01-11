@@ -11,7 +11,25 @@ class PerformanceService:
     """
     Service to manage strategies: saving, updating performance, fetching, and querying.
     """
+    @staticmethod
+    def get_latest_performance_data() -> Dict:
+        """
+        Fetch latest performance data.
 
+        Returns:
+            Dict: The most recent performance data.
+        """
+        try:
+            results = natural_query("Latest performance data", limit=1)
+            logger.info(f"Natural query results: {results}")
+
+            if results:
+                return results[0]["metadata"]["data"]
+            return {}
+        except Exception as e:
+            logger.error(f"Error fetching performance data: {e}")
+            return {}
+    
     @staticmethod
     def save_strategy(strategy: Dict) -> None:
         """
@@ -152,19 +170,4 @@ class PerformanceService:
             logger.error(f"Error querying strategies: {e}")
             return []
 
-    @staticmethod
-    def fetch_historical_performance() -> Dict:
-        """
-        Fetch dummy historical performance data.
-
-        Returns:
-            Dict: Dummy historical performance for predefined strategies.
-        """
-        logger.info("Fetching historical performance data (dummy)...")
-        return {
-            "strategy_1": "success",
-            "strategy_2": "failure",
-            "strategy_3": "success",
-            "strategy_4": "failure",
-            "strategy_5": "success",
-        }
+    

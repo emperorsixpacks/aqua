@@ -11,7 +11,7 @@ class PerformanceAgent:
     async def analyze_performance(self, state: Dict) -> Command:
         """Performance analysis agent that evaluates historical strategies."""
         try:
-            performance_data = PerformanceService.fetch_historical_performance()
+            performance_data = PerformanceService.get_latest_performance_data()
             logger.info("Fetched historical performance data successfully.")
 
             performance_summary = self._analyze_data(performance_data)
