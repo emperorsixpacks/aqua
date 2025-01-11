@@ -7,6 +7,12 @@ venv/
 ENV/
 .env/
 
+.env
+.env.local
+.env.*.local
+.env.test
+.env.production
+
 .idea/
 .vscode/
 
