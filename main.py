@@ -1,12 +1,12 @@
 from langgraph.graph import StateGraph, START, END
 from langchain_core.messages import HumanMessage
-from agents.market_agent import MarketAgent
-from agents.risk_agent import RiskAgent
-from agents.strategy_agent import StrategyAgent
-from agents.performance_agent import PerformanceAgent
+from src.agents.market_agent import MarketAgent
+from src.agents.risk_agent import RiskAgent
+from src.agents.strategy_agent import StrategyAgent
+from src.agents.performance_agent import PerformanceAgent
 from states import AgentState
 
-workflow = StateGraph(AgentState)
+workflow = StateGraph(AgentState)   
 
 market_agent = MarketAgent()
 risk_agent = RiskAgent()
