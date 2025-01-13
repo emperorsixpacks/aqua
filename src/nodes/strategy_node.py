@@ -1,7 +1,10 @@
 import json
 import logging
+from src.services.performance_service import PerformanceService
+from src.config.llm_config import CREATIVE_TEMPERATURE, DEFAULT_TEMPERATURE, GPT3_5_MODEL
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from src.prompts.strategy_prompts import StrategyGenerationPrompt
 from src.config.min_deposits import MIN_DEPOSITS
 from src.config.protocols_config import PROTOCOLS_CONFIG
 from src.config.strategy_config import STRATEGY_CONFIG
@@ -23,63 +26,36 @@ async def generate_strategy(state: dict) -> dict:
         min_deposit = MIN_DEPOSITS.get(asset, "0")
 
         markets = protocol_config["addresses"]["markets"]
-        market_address_text = ",\n  ".join([f"{key}: {value}" for key, value in markets.items()])
-
-        system_instructions = SystemMessage(content="""You are a DeFi strategy analyst. Your task is to generate or analyze a DeFi strategy based on the following actions:
-
-        - SUPPLY: The user supplies an asset (e.g., USDC, WETH) and receives wrapped tokens (e.g., mUSDC, mWETH) in return. The user earns interest on the supplied asset, paid in the same asset.
-        - WITHDRAW: The user withdraws wrapped tokens and receives the original asset (e.g., USDC, WETH) back.
-        - BORROW: The user borrows an asset (e.g., USDC, WETH) by providing collateral (e.g., mUSDC, mWETH). The amount borrowed is determined by the loan-to-value (LTV) ratio.
-        - REPAY: The user repays the borrowed asset along with any interest, using the same asset they borrowed (e.g., repay USDC for borrowed USDC).
-
-        You can generate or analyze a DeFi strategy based on these actions and provide a clear, actionable strategy.""")
-
-        human_message = HumanMessage(content=f"""Generate a one step strategy for the given asset and protocol:
-        - Risk Analysis: {risk_analysis}
-        - Asset: {asset}
-        - Protocol: {protocol.capitalize()}
-        - Connector: {CONNECTORS[protocol]}
-        - Market Token Address(SUPPLY receives, WITHDRAW sends - mToken address like mWETH, mUSDC, mBTC, mcBTC): 
-        {market_address_text}
-        - Base Token Address(SUPPLY sends, WITHDRAW receives, BORROW receives, REPAY sends - Base token address like WETH, USDC, BTC, cBTC): 
-        {base_token_address}
-        - Minimum Deposit: {min_deposit}
-        - Supported Actions: {', '.join(protocol_config['supportedActions'])}
-        - Constraints: {json.dumps(strategy_config.get('constraints', {}), indent=2)}
-
-        Instructions for generating the strategy:
-        - Determine the appropriate `actionType` based on the protocol's supported actions.
-        - Dynamically decide the `assetsIn` and `assetOut` fields based on the asset, protocol, and market provided.
-        - Use `assetsIn` for the input asset (e.g., for SUPPLY or REPAY).
-        - Use `assetOut` for the output asset (e.g., for BORROW or WITHDRAW).
-        - Select appropriate values for `assetsIn` and `assetOut` from the given `Market Addresses` or fallback to the `Base Token Address`.
-        - Adhere to any provided constraints.
-
-        Format the strategy as a valid JSON object:
-        {{
-            "name": "Strategy name",
-            "description": "Detailed explanation about the strategy",
-            "steps": [
-                {{
-                    "connector": "{CONNECTORS[protocol]}",
-                    "actionType": "SUPPLY/BORROW/WITHDRAW/REPAY",
-                    "assetsIn": ["0xAddress"],
-                    "assetOut": "0xAddress",
-                    "amountRatio": "10000",
-                    "data": "0x"
-                }}
-            ],
-            "minDeposit": "{min_deposit}"
-        }}
-        Ensure the JSON is properly formatted without comments.""")
-
-        messages.append(system_instructions)
-        messages.append(human_message)
-
+        model = ChatOpenAI(
+            model=GPT3_5_MODEL
+        )
+        
+        messages = [
+            SystemMessage(content=StrategyGenerationPrompt.get_system_prompt()),
+            HumanMessage(content=StrategyGenerationPrompt.get_human_prompt(
+                risk_analysis=risk_analysis,
+                asset=asset,
+                protocol=protocol,
+                protocol_config=protocol_config,
+                strategy_config=strategy_config,
+                base_token_address=base_token_address,
+                min_deposit=min_deposit,
+                market_addresses=markets,
+                connector=CONNECTORS[protocol]
+            ))
+        ]
         model = ChatOpenAI(model="gpt-3.5-turbo")
         strategy_response = await model.ainvoke(messages)
 
-        logger.info(f"DeFi strategy generated: {strategy_response}")
+        strategy_content = strategy_response.content
+        try:
+            parsed_strategy = json.loads(strategy_content)
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse strategy response: {e}")
+            raise ValueError("The strategy response from the model is not valid JSON.")
+
+        await PerformanceService.save_strategy(parsed_strategy)
+        logger.info(f"DeFi strategy generated and saved: {parsed_strategy}")
 
         state["messages"] = state.get("messages", []) + [AIMessage(content=f"Generated DeFi strategy: {strategy_response}")]
         state["strategy_signals"] = strategy_response

@@ -1,6 +1,8 @@
 import logging
+from src.config.llm_config import CREATIVE_TEMPERATURE, DEFAULT_TEMPERATURE, GPT3_5_MODEL
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from src.prompts.performance_prompts import PerformanceAnalysisPrompt
 from src.services.performance_service import PerformanceService
 
 logger = logging.getLogger("performance_node")
@@ -11,19 +13,15 @@ async def analyze_performance(state: dict) -> dict:
 
         logger.info(f"Fetched historical performance data successfully: {performance_data}")
 
-        model = ChatOpenAI(model="gpt-3.5-turbo")
-        system_instructions = SystemMessage(content="""You are a performance analyst expert. Your role is to:
-        - Evaluate historical strategies based on performance data
-        - Identify successful strategies and the factors contributing to their success
-        - Identify failed strategies and provide insights into why they failed
-        - Calculate success rates and summarize the overall performance
-        - Provide actionable insights and recommendations for future strategies.""")
-
+        model = ChatOpenAI(
+            model=GPT3_5_MODEL
+        )
+        
         messages = [
-            system_instructions,
-            HumanMessage(content=f"""Please analyze the following historical performance data and provide a summary:
-            Performance Data: {performance_data}
-            Please identify successful strategies, failed strategies, and calculate the success rate. Also, provide recommendations for improving future strategies.""")
+            SystemMessage(content=PerformanceAnalysisPrompt.get_system_prompt()),
+            HumanMessage(content=PerformanceAnalysisPrompt.get_human_prompt(
+                performance_data=performance_data
+            ))
         ]
 
         analysis_response = await model.ainvoke(messages)

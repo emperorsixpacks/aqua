@@ -1,7 +1,9 @@
 import logging
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from src.prompts.market_prompts import MarketAnalysisPrompt
 from src.services.market_service import MarketService
+from src.config.llm_config import CREATIVE_TEMPERATURE, GPT3_5_MODEL, DEFAULT_TEMPERATURE
 
 logger = logging.getLogger("market_node")
 
@@ -10,19 +12,13 @@ async def analyze_market(state: dict) -> dict:
         market_data = MarketService.get_latest_market_data()
         logger.info(f"Fetched market data successfully: {market_data}")
 
-        model = ChatOpenAI(model="gpt-3.5-turbo")
-        system_instructions = SystemMessage(content="""You are a financial analyst expert. Your role is to:
-        - Identify key trends in market data
-        - Assess overall market health based on supply, borrow rates, and liquidity
-        - Provide a brief but thorough analysis of market conditions""")
+        model = ChatOpenAI(
+            model=GPT3_5_MODEL,
+        )
 
         messages = [
-            system_instructions,
-            HumanMessage(
-                content=f"""Please analyze the following market data:
-                Market Data: {market_data}
-                Provide a concise report based on the instructions."""
-            )
+            SystemMessage(content=MarketAnalysisPrompt.get_system_prompt()),
+            HumanMessage(content=MarketAnalysisPrompt.get_human_prompt(market_data=market_data))
         ]
 
         analysis_response = await model.ainvoke(messages)
