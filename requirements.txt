@@ -8,3 +8,4 @@ pydantic>=2.7.4
 python-dotenv
 pinecone
 apscheduler
+langchain-pinecone>=0.0.2

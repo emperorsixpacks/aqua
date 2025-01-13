@@ -1,5 +1,6 @@
 from typing import Dict, Optional
 from dataclasses import dataclass
+from src.providers.types.common import RiskMetrics, Token
 
 @dataclass
 class Market:

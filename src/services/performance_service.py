@@ -1,7 +1,9 @@
+import json
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional
 from src.utils.pinecone_client import fetch, natural_query, save
+from src.services.vector_service import VectorService
 
 logger = logging.getLogger("PERFORMANCE_SERVICE")
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +21,7 @@ class PerformanceService:
             Dict: The most recent performance data.
         """
         try:
-            results = natural_query("Latest performance data", limit=1)
+            results = VectorService.natural_query("Latest performance data", limit=1)
             logger.info(f"Natural query results: {results}")
 
             if results:
@@ -30,7 +32,7 @@ class PerformanceService:
             return {}
     
     @staticmethod
-    def save_strategy(strategy: Dict) -> None:
+    async def save_strategy(strategy: Dict) -> None:
         """
         Save a generated strategy into Pinecone.
 
@@ -42,6 +44,12 @@ class PerformanceService:
 
             strategy_id = f"strategy_{int(datetime.utcnow().timestamp())}"
 
+            strategy_text = {
+                "name": strategy["name"],
+                "description": strategy["description"],
+                "steps": strategy["steps"],
+                "minDeposit": strategy.get("minDeposit", "0")
+            }
             performance_metrics = {
                 "success_rate": 0,  
                 "profit": 0, 
@@ -55,13 +63,24 @@ class PerformanceService:
                 "description": strategy["description"],
                 "minDeposit": strategy.get("minDeposit", "0"),
                 "created_at": datetime.utcnow().isoformat(),
+                "updated_at": datetime.utcnow().isoformat(),
+                "steps_hash": hash(json.dumps(strategy["steps"], sort_keys=True)),
+                "status": "active",
                 **performance_metrics
             }
 
-            save(
+            searchable_text = f"""
+            Strategy Name: {strategy["name"]}
+            Description: {strategy["description"]}
+            Minimum Deposit: {strategy.get("minDeposit", "0")}
+            Actions: {[step["actionType"] for step in strategy["steps"]]}
+            Full Strategy: {json.dumps(strategy_text, indent=2)}
+            """
+
+            await VectorService.save(
                 key=strategy_id,
                 metadata=metadata,
-                text=strategy["description"] 
+                text=searchable_text
             )
             logger.info(f"Strategy saved successfully with ID: {strategy_id}")
 
@@ -80,7 +99,7 @@ class PerformanceService:
         try:
             logger.info(f"Updating strategy performance for ID: {strategy_id}")
 
-            strategy = fetch(strategy_id)
+            strategy = VectorService.fetch(strategy_id)
             if not strategy:
                 logger.warning(f"No strategy found with ID: {strategy_id}")
                 return
@@ -93,7 +112,7 @@ class PerformanceService:
                 **update_data
             })
 
-            save(key=strategy_id, metadata=metadata, text=metadata["description"])
+            VectorService.save(key=strategy_id, metadata=metadata, text=metadata["description"])
             logger.info(f"Strategy performance updated successfully for ID: {strategy_id}")
 
         except Exception as e:
@@ -113,7 +132,7 @@ class PerformanceService:
         try:
             logger.info(f"Fetching strategy with ID: {strategy_id}")
 
-            strategy = fetch(strategy_id)
+            strategy = VectorService.fetch(strategy_id)
             if strategy:
                 logger.info(f"Fetched strategy: {strategy_id}")
                 return strategy
@@ -139,7 +158,7 @@ class PerformanceService:
         """
         try:
             logger.info("Fetching saved strategies from Pinecone...")
-            strategies = fetch(key="all")  
+            strategies = VectorService.fetch(key="all")  
             logger.info(f"Fetched {len(strategies)} strategies.")
             return strategies[:limit]
 
@@ -161,7 +180,7 @@ class PerformanceService:
         """
         try:
             logger.info(f"Querying strategies with plain English: '{query}'")
-            strategies = natural_query(query=query, limit=limit)
+            strategies = VectorService.natural_query(query=query, limit=limit)
             logger.info(f"Found {len(strategies)} strategies matching the query: '{query}'")
             return strategies
 
