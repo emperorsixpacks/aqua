@@ -2,8 +2,8 @@ import json
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional
-from src.utils.pinecone_client import fetch, natural_query, save
 from src.services.vector_service import VectorService
+
 
 logger = logging.getLogger("PERFORMANCE_SERVICE")
 logging.basicConfig(level=logging.INFO)
