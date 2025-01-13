@@ -114,9 +114,8 @@ class VectorStoreService:
         """
         try:
             logger.info("Fetching data from vector store for key: %s", key)
-            # Use similarity search to find exact match by key
             results = await self.vector_store.asimilarity_search_with_score(
-                query="",  # Empty query since we're filtering by key
+                query="",
                 k=1,
                 filter={"id": key}
             )
@@ -146,15 +145,12 @@ class VectorStoreService:
         """
         try:
             logger.info("Updating data in vector store for key: %s", key)
-            # First check if the key exists
             existing_data = await self.fetch(key)
             if not existing_data:
                 logger.warning("No existing data found for key: %s. Creating new entry.", key)
             
-            # Delete existing entry if it exists
             await self.vector_store.adelete([key])
             
-            # Add updated entry
             await self.save(key, metadata, text)
             logger.info("Data updated successfully for key: %s", key)
         except Exception as e:
@@ -207,7 +203,6 @@ class VectorStoreService:
                 filter=filter
             )
             
-            # Filter by minimum score and format results
             formatted_results = [
                 {
                     "document": doc.page_content,

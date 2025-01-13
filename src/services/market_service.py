@@ -1,9 +1,10 @@
 import json
 import logging
 from typing import Dict
+from src.services.vector_service import VectorService
 from src.providers.defi_llama_provider import get_market_data
 from src.providers.types.market_types import MarketData
-from src.utils.pinecone_client import natural_query, save  
+
 
 logger = logging.getLogger("MARKET_SERVICE")
 logging.basicConfig(level=logging.INFO)
@@ -60,7 +61,7 @@ class MarketService:
             return {}
 
     @staticmethod
-    def save_market_data(market_data: Dict) -> None:
+    async def save_market_data(market_data: Dict) -> None:
         """
         Saves market data to Pinecone.
 
@@ -84,7 +85,7 @@ class MarketService:
                 "data": json.dumps(market_data)
             }
 
-            save(key=key, metadata=metadata, text=text)
+            await VectorService.save(key=key, metadata=metadata, text=text)
             logger.info(f"Market data saved successfully with key: {key}")
         except Exception as e:
             logger.error(f"Error saving market data to Pinecone: {e}")
@@ -99,7 +100,7 @@ class MarketService:
             Dict: The most recent market data.
         """
         try:
-            results = natural_query("Latest market data", limit=1)
+            results = VectorService.natural_query("Latest market data", limit=1)
             logger.info(f"Natural query results: {results}")
 
             if results:
