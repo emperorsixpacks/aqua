@@ -4,7 +4,8 @@ from langchain_core.messages import AIMessage, SystemMessage, HumanMessage
 from langgraph.graph import END
 from typing import Dict
 import logging
-from services.market_service import MarketService
+from src.services.market_service import MarketService
+
 
 logger = logging.getLogger("MarketAgent")
 logger.setLevel(logging.INFO)

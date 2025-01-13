@@ -1,7 +1,7 @@
 import logging
-from services.market_service import MarketService
+from src.services.market_service import MarketService
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("MarketDataJob")
 logging.basicConfig(level=logging.INFO)
 
 class MarketDataJob:

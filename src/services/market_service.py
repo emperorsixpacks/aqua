@@ -1,9 +1,9 @@
 import json
 import logging
 from typing import Dict
-from providers.defi_llama_provider import get_market_data
-from providers.types.market_types import MarketData
-from utils.pinecone_client import natural_query, save  
+from src.providers.defi_llama_provider import get_market_data
+from src.providers.types.market_types import MarketData
+from src.utils.pinecone_client import natural_query, save  
 
 logger = logging.getLogger("MARKET_SERVICE")
 logging.basicConfig(level=logging.INFO)

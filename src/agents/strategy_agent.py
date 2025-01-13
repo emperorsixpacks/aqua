@@ -6,11 +6,11 @@ from langgraph.graph import END
 from typing import Dict
 import logging
 
-from config.min_deposits import MIN_DEPOSITS
-from config.protocols_config import PROTOCOLS_CONFIG
-from config.strategy_config import STRATEGY_CONFIG
-from config.tokens_config import BASE_TOKENS
-from evm.addresses import CONNECTORS
+from src.config.min_deposits import MIN_DEPOSITS
+from src.config.protocols_config import PROTOCOLS_CONFIG
+from src.config.strategy_config import STRATEGY_CONFIG
+from src.config.tokens_config import BASE_TOKENS
+from src.evm.addresses import CONNECTORS
 
 logger = logging.getLogger("StrategyAgent")
 logger.setLevel(logging.INFO)

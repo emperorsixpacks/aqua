@@ -1,7 +1,7 @@
 import logging
 import json
 from typing import Dict
-from evm.addresses import CONNECTORS
+from src.evm.addresses import CONNECTORS
 
 logger = logging.getLogger(__name__)
 

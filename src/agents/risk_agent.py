@@ -1,7 +1,7 @@
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command
 from langchain_core.messages import AIMessage, SystemMessage, HumanMessage
-from services.market_service import MarketService
+from src.services.market_service import MarketService
 import logging
 from typing import Dict
 

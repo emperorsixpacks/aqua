@@ -1,7 +1,7 @@
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command
 from langchain_core.messages import AIMessage, SystemMessage, HumanMessage
-from services.performance_service import PerformanceService
+from src.services.performance_service import PerformanceService
 import logging
 from typing import Dict
 
