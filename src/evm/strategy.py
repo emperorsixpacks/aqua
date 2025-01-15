@@ -1,53 +1,57 @@
-from types.strategy import GeneratedStrategy, Step
-from eth_account import Account
 import os
-from client import public_client, wallet_client
-from src.config.addresses_config import STRATEGY
+from typing import Dict, Any
+from web3 import Web3
+from eth_account import Account
+from eth_typing import Address
+from src.evm.client import public_client, wallet_client
 from src.evm.contracts.abis.strategy_abi import STRATEGY_ABI
 
-async def create_strategy(strategy: GeneratedStrategy):
-    if not os.getenv('PRIVATE_KEY'):
-        raise ValueError("PRIVATE_KEY environment variable is required")
-    
-    account = Account.from_key(os.getenv('PRIVATE_KEY'))
-    
-    try:
-        strategy_contract = wallet_client.eth.contract(
-            address=STRATEGY,
-            abi=STRATEGY_ABI["abi"]
-        )
-        transaction = strategy_contract.functions.createStrategy(
-            strategy["name"],
-            strategy["description"],
-            [
-                {
-                    "connector": step["connector"],
-                    "actionType": step["actionType"],
-                    "assetsIn": step["assetsIn"],
-                    "assetOut": step["assetOut"],
-                    "amountRatio": step["amountRatio"],
-                    "data": step["data"]
-                }
-                for step in strategy["steps"]
-            ],
-            strategy["minDeposit"]
-        ).build_transaction({
-            'from': account.address,
-            'nonce': wallet_client.eth.get_transaction_count(account.address),
-            'gas': 2000000,
-            'gasPrice': wallet_client.eth.gas_price
-        })
+async def deploy_strategy_onchain(
+   strategy: Dict[str, Any],
+   contract_address: Address,
+   contract_abi: Dict[str, Any] = STRATEGY_ABI
+) -> Dict[str, Any]:
+   private_key = os.getenv('PRIVATE_KEY')
+   if not private_key:
+       raise ValueError("PRIVATE_KEY environment variable is required")
 
-        signed_txn = wallet_client.eth.account.sign_transaction(
-            transaction, 
-            private_key=os.getenv('PRIVATE_KEY')
-        )
+   account = Account.from_key(private_key)
+   
+   strategy_contract = public_client.eth.contract(
+       address=contract_address,
+       abi=contract_abi["abi"]
+   )
 
-        tx_hash = wallet_client.eth.send_raw_transaction(signed_txn.rawTransaction)
+   formatted_steps = [
+       {
+           "connector": step["connector"],
+           "actionType": step["actionType"], 
+           "assetsIn": step["assetsIn"],
+           "assetOut": step["assetOut"],
+           "amountRatio": int(step["amountRatio"]),
+           "data": Web3.to_bytes(hexstr=step["data"]) if step["data"] else b''
+       }
+       for step in strategy["steps"]
+   ]
 
-        receipt = wallet_client.eth.wait_for_transaction_receipt(tx_hash)
+   transaction = strategy_contract.functions.createStrategy(
+       strategy["name"],
+       strategy["description"],
+       formatted_steps,
+       int(strategy["minDeposit"])
+   ).build_transaction({
+       'from': account.address,
+       'nonce': public_client.eth.get_transaction_count(account.address),
+       'gas': 2000000,
+       'gasPrice': public_client.eth.gas_price,
+       'maxFeePerGas': public_client.eth.max_priority_fee + public_client.eth.gas_price,
+       'maxPriorityFeePerGas': public_client.eth.max_priority_fee
+   })
 
-        return receipt
-    except Exception as error:
-        print(f"Error creating strategy: {error}")
-        raise
+   signed_txn = wallet_client.eth.account.sign_transaction(
+       transaction,
+       private_key=private_key
+   )
+   tx_hash = wallet_client.eth.send_raw_transaction(signed_txn.rawTransaction)
+   
+   return wallet_client.eth.wait_for_transaction_receipt(tx_hash)
