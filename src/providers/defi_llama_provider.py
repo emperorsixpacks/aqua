@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from typing import List, Dict, Any, Tuple
-from src.config.tokens_config import BASE_TOKENS
+from src.config.addresses_config import BASE_TOKENS
 from src.providers.types.common import PriceChange, RiskMetrics, Token
 from src.providers.types.market_types import CoinsResponse, Market, MarketData
 from src.utils.api_client import fetch_with_retry
