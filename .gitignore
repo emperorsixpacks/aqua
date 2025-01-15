@@ -25,3 +25,5 @@ build/
 
 *.bak
 *.swp
+src/.DS_Store
+.DS_Store
