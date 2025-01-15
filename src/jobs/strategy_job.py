@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from src.evm.strategy import deploy_strategy_onchain
@@ -23,9 +24,8 @@ async def schedule_strategy_deployment(strategy: dict):
     
     scheduler.add_job(
         strategy_deployment_job,
-        'date',
         args=[strategy],
-        next_run_time=asyncio.get_event_loop().time() + 1
+        next_run_time=datetime.now()
     )
 
 async def shutdown():

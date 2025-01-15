@@ -45,7 +45,7 @@ async def generate_strategy(state: dict) -> dict:
                 connector=CONNECTORS[protocol]
             ))
         ]
-        model = ChatOpenAI(model="gpt-3.5-turbo")
+        model = ChatOpenAI(model=GPT3_5_MODEL)
         strategy_response = await model.ainvoke(messages)
 
         strategy_content = strategy_response.content

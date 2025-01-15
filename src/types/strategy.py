@@ -14,3 +14,11 @@ class GeneratedStrategy(TypedDict):
     description: str
     steps: List[Step]
     minDeposit: int
+
+
+ACTION_TYPES = {
+   'SUPPLY': 0,
+   'BORROW': 1, 
+   'WITHDRAW': 2,
+   'REPAY': 3,
+}

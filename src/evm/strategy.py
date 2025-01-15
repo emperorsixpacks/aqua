@@ -5,6 +5,7 @@ from eth_account import Account
 from eth_typing import Address
 from src.evm.client import public_client, wallet_client
 from src.evm.contracts.abis.strategy_abi import STRATEGY_ABI
+from src.types.strategy import ACTION_TYPES
 
 async def deploy_strategy_onchain(
    strategy: Dict[str, Any],
@@ -23,14 +24,14 @@ async def deploy_strategy_onchain(
    )
 
    formatted_steps = [
-       {
-           "connector": step["connector"],
-           "actionType": step["actionType"], 
-           "assetsIn": step["assetsIn"],
-           "assetOut": step["assetOut"],
-           "amountRatio": int(step["amountRatio"]),
-           "data": Web3.to_bytes(hexstr=step["data"]) if step["data"] else b''
-       }
+       (
+           Web3.to_checksum_address(step["connector"]),
+           ACTION_TYPES[step["actionType"]],
+           [Web3.to_checksum_address(addr) for addr in step["assetsIn"]],
+           Web3.to_checksum_address(step["assetOut"]),
+           int(step["amountRatio"]),
+           Web3.to_bytes(hexstr=step["data"]) if step["data"] else b''
+       )
        for step in strategy["steps"]
    ]
 
@@ -43,8 +44,7 @@ async def deploy_strategy_onchain(
        'from': account.address,
        'nonce': public_client.eth.get_transaction_count(account.address),
        'gas': 2000000,
-       'gasPrice': public_client.eth.gas_price,
-       'maxFeePerGas': public_client.eth.max_priority_fee + public_client.eth.gas_price,
+       'maxFeePerGas': public_client.eth.max_priority_fee * 2 + public_client.eth.gas_price,
        'maxPriorityFeePerGas': public_client.eth.max_priority_fee
    })
 
@@ -52,6 +52,6 @@ async def deploy_strategy_onchain(
        transaction,
        private_key=private_key
    )
-   tx_hash = wallet_client.eth.send_raw_transaction(signed_txn.rawTransaction)
+   tx_hash = wallet_client.eth.send_raw_transaction(signed_txn.raw_transaction)
    
    return wallet_client.eth.wait_for_transaction_receipt(tx_hash)
