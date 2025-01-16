@@ -71,7 +71,7 @@ The following sequence diagram illustrates the detailed interaction flow between
 
 ### Workflow Example
 
-The following example illustrates how LiqAI executes its automated DeFi strategy workflow, from market analysis through deployment and monitoring.
+The following example illustrates how Aqua executes its automated DeFi strategy workflow, from market analysis through deployment and monitoring.
 
 Monday 00:00 UTC:
 
