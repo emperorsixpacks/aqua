@@ -115,15 +115,15 @@ For the rest of the week, the system continuously tracks performance, logs data 
 - [ ] Auto-balancing or reallocation triggers, minimizing user manual interventions even further.
 - [ ] Ability for anyone to create their own Liquid Agents
 
-And so on.. Feel free to suggest ideas on how we can improve liquid agents
+And so on.. Feel free to suggest ideas on how we can improve Aqua
 
 ## Getting Started
 
 Clone the Repo
 
 ```bash
-git clone https://github.com/metastable-labs/liquid-agent.git
-cd liquid-agent
+git clone https://github.com/metastable-labs/aqua.git
+cd aqua
 ```
 
 Install Dependencies
