@@ -13,7 +13,7 @@ The Liquid AI Agent Curator exists to bridge this gap, providing:
 - Multi-step DeFi strategies with minimal user overhead (e.g., supply, borrow, repay, leverage).
 - Continuous performance monitoring and future strategic refinements.
 
-### Why Now?
+#### Why Now?
 
 - Rapidly evolving DeFi: Protocols emerge daily with new yield opportunities. AI-driven curation helps filter out noise and identify robust strategies quickly.
 - Reducing complexity: Users often juggle multiple tabs, wallets, yield calculators, etc. Automated workflows streamline the entire cycle—from data collection to final deployment.
