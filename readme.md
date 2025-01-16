@@ -1,10 +1,12 @@
-# LiqAI
+# Tele
 
-Liquid AI Agent Curator is an automated system that acts as a DeFi strategy curator, analyzing market conditions to create and optimize yield strategies for USDC and WETH on Base using the Liquid protocol. The system leverages artificial intelligence to generate multi-step strategies while continuously monitoring performance and managing risk.
+Tele is a framework for creating Liquid agents, Liquid Agents acts as a DeFi strategy curator, analyzing market conditions to create and optimize yield strategies for USDC and WETH on Base using the Liquid protocol. The system leverages artificial intelligence to generate multi-step strategies while continuously monitoring performance and managing risk.
 
 ## Overview
 
 DeFi (Decentralized Finance) has unlocked a world of opportunities yield farming, lending, borrowing, liquidity mining but it remains complex for many. Managing multiple protocols, keeping track of TVL changes, APYs, and risk metrics demands considerable time and expertise.
+
+Liquid Agents are autonomous entities designed to manage and curate strategies on behalf of users. Liquid Agents leverage advanced AI-driven insights to optimize both strategy creation and execution, while operating strictly within predefined risk and reward parameters to ensure responsible management.
 
 The Liquid AI Agent Curator exists to bridge this gap, providing:
 
@@ -21,7 +23,7 @@ The Liquid AI Agent Curator exists to bridge this gap, providing:
 
 ## Components
 
-Below is a breakdown of major layers and modules in the Liquid AI Agent Curator:
+Below is a breakdown of major layers and modules in the Liquid Agent:
 
 #### Data Layer
 
@@ -107,35 +109,21 @@ For the rest of the week, the system continuously tracks performance, logs data 
 4. Liquid Protocol
    As the foundational DeFi infrastructure, the Liquid Protocol enables sophisticated strategy deployment and provides a robust decentralized execution framework for all system operations.
 
-## Future Directions
+## Roadmap (not in order):
+- [ ] Character/personailty building into Liquid pioneer Agent
+- [ ] Risk Modelling: Incorporating volatility measures and real-time liquidation risk in the agent's calculations.
+- [ ] Auto-balancing or reallocation triggers, minimizing user manual interventions even further.
+- [ ] Ability for anyone to create their own Liquid Agents
 
-Advanced Risk Modeling
-
-- Incorporating volatility measures and real-time liquidation risk in the agent's calculations.
-
-Social Graph & User Profiles
-
-- Users can follow top-performing strategies or "curators," building a social layer around strategy sharing.
-
-Multi-Chain Expansion
-
-- Integrate additional L2s or other EVM chains for broader yield opportunities.
-
-Adaptive Strategies
-
-- Auto-balancing or reallocation triggers, minimizing user manual interventions even further.
-
-Mini Telegram App
-
-- Chat-based interface to query performance stats or tweak leverage on the fly.
+And so on.. Feel free to suggest ideas on how we can improve liquid agents
 
 ## Getting Started
 
 Clone the Repo
 
 ```bash
-git clone https://github.com/metastable-labs/LiqAI.git
-cd LiqAI
+git clone https://github.com/metastable-labs/liquid-agent.git
+cd liquid-agent
 ```
 
 Install Dependencies
