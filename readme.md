@@ -110,6 +110,7 @@ For the rest of the week, the system continuously tracks performance, logs data 
    As the foundational DeFi infrastructure, the Liquid Protocol enables sophisticated strategy deployment and provides a robust decentralized execution framework for all system operations.
 
 ## Roadmap (not in order):
+
 - [ ] Character/personailty building into **Yuki**
 - [ ] Strategy prompting - Enable us(Liquid team) create strategies every week via a prompt interface
 - [ ] Risk Modelling: Incorporating volatility measures and real-time liquidation risk in the agent's calculations.
@@ -150,7 +151,7 @@ BASE_RPC_URL=https://base-mainnet.infura.io/v3/xxxxxxxxxxxxxxxxxxx
 Run
 
 ```bash
-python agent.py
+python main.py
 ```
 
 Observe

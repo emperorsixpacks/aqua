@@ -4,10 +4,10 @@ from src.nodes.market_node import analyze_market
 from src.nodes.risk_node import assess_risk
 from src.nodes.strategy_node import generate_strategy
 from src.nodes.performance_node import analyze_performance
-from states import AgentState
+from src.states import AgentState
+
 
 memory = MemorySaver()
-
 workflow = StateGraph(AgentState)
 
 workflow.add_node("analyze_market", analyze_market)
@@ -23,3 +23,6 @@ workflow.add_edge("assess_risk", "generate_strategy")
 workflow.add_edge("generate_strategy", END)
 
 graph = workflow.compile(checkpointer=memory)
+
+def create_graph():
+    return graph

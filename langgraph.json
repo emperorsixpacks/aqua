@@ -1,7 +1,7 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "LIQ-AGENT": "./agent.py:graph"
+    "LIQ-AGENT": "./src/graph.py:create_graph"
   },
   "env": ".env",
   "python_version": "3.11",
