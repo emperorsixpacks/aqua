@@ -97,48 +97,6 @@ sequenceDiagram
 
 #### Process Steps
 
-```mermaid
-sequenceDiagram
-    participant DL as DeFi Llama
-    participant MA as Market Analyzer
-    participant PA as Performance Analyzer
-    participant PDB as Pinecone VectorDB
-    participant RA as Risk Analyzer
-    participant SG as Strategy Generator
-    participant BC as Blockchain
-
-    par Market Analysis
-        DL->>MA: Fetch onchain data
-        MA->>PDB: Store market data
-        MA->>MA: Analyze last 2 weeks data
-    and Performance Analysis
-        PA->>PDB: Fetch previous strategy data
-        Note over PA: Analyze strategy performance
-        Note over PA: Check previous week's strategy
-    end
-
-    par Risk Assessment
-        MA->>RA: Send market analysis
-        PA->>RA: Send performance analysis
-        RA->>RA: Assess potential risks
-        RA->>SG: Send risk-analyzed data
-        SG->>SG: Generate multi-step strategy
-        Note over SG: Create Borrow/Supply/Repay/Withdraw steps
-        SG->>BC: Deploy strategy
-        SG->>PDB: Store strategy data
-        Note over SG: Strategy Constraints
-        Note over SG: USDC: 80% lending, 95% stablecoin
-        Note over SG: WETH: 60% lending, 2x max leverage
-    end
-
-    loop Continuous Monitoring
-        PA->>BC: Monitor deployed strategies
-        PA->>PDB: Update performance metrics
-    end
-```
-
-#### Process Steps
-
 1. Fetch Data: Retrieve on-chain stats, store them in Pinecone (alongside older data for historical context).
 2. Parallel Analysis:
    - Market: Evaluate yields, volatility.
