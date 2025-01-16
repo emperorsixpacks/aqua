@@ -1,88 +1,241 @@
 # LiqAI
 
-LiqAI (Liquid AI Agent Curator) is a multi-agent system designed to create, optimize, and manage decentralized finance (DeFi) strategies on the Base network through the Liquid protocol. Leveraging state-of-the-art technologies such as LangGraph, LangChain, and Pinecone, LiqAI offers a robust framework for market analysis, risk assessment, and dynamic strategy execution within the DeFi ecosystem.
+Liquid AI Agent Curator is an automated system that acts as a DeFi strategy curator, analyzing market conditions to create and optimize yield strategies for USDC and WETH on Base using the Liquid protocol. The system leverages artificial intelligence to generate multi-step strategies while continuously monitoring performance and managing risk.
 
-The system operates through a centralized supervisory agent, called the LIQ Supervisor Agent, that coordinates multiple specialized agents to analyze markets, assess risks, and execute optimal strategies. This intelligent multi-agent architecture enhances decision-making efficiency, scalability, and fault tolerance, ensuring high-performance DeFi strategy execution.
+## System Overview
 
-## Why Multi-Agent Architecture?
+DeFi (Decentralized Finance) has unlocked a world of opportunities—yield farming, lending, borrowing, liquidity mining—but it remains complex for many. Managing multiple protocols, keeping track of TVL changes, APYs, and risk metrics demands considerable time and expertise.
 
-Our multi-agent architecture delivers significant advantages that make it ideal for complex DeFi systems:
+The Liquid AI Agent Curator exists to bridge this gap, providing:
 
-1. **Specialized Expertise**
-   Each agent in the system specializes in a specific domain of DeFi operations, enabling deep expertise in focused areas. This specialization results in improved overall performance and adaptability as each agent can develop and maintain profound knowledge in its designated field.
+- Automated data retrieval & analysis (e.g., from DeFi Llama).
+- AI-based risk profiling to avoid illiquid or volatile positions.
+- Multi-step DeFi strategies with minimal user overhead (e.g., supply, borrow, repay, leverage).
+- Continuous performance monitoring and future strategic refinements.
 
-2. **Parallel Processing**
-   The system achieves exceptional efficiency through concurrent processing of various DeFi strategy aspects. This parallel architecture enables fast decision-making while efficiently processing multiple data streams, ensuring real-time adaptability to market conditions.
+### Why Now?
 
-3. **Fault Tolerance**
-   Through independent agent operation, the system maintains high resilience to individual failures. This independence ensures continuous functionality of the overall system even when individual components experience issues, maintaining robust operation under various conditions.
+- Rapidly evolving DeFi: Protocols emerge daily with new yield opportunities. AI-driven curation helps filter out noise and identify robust strategies quickly.
+- Reducing complexity: Users often juggle multiple tabs, wallets, yield calculators, etc. Automated workflows streamline the entire cycle—from data collection to final deployment.
+- Enhancing accessibility: By providing a user-friendly AI agent, new entrants can safely experience DeFi without needing in-depth expertise about lending, leveraging, or risk management.
 
-4. **Scalability**
-   The system architecture allows for seamless addition of new agents and adaptation to evolving DeFi protocols. This flexibility enables quick responses to new market conditions and easy integration of additional capabilities as the DeFi ecosystem grows.
+## Protocol & Architecture Design
 
-5. **Dynamic Adaptation**
-   The system continuously updates strategies autonomously based on market conditions and performance feedback. This constant optimization process ensures that strategies remain effective and relevant in the rapidly changing DeFi landscape.
+Below is a breakdown of major layers and modules in the Liquid AI Agent Curator:
 
-## Key Components & Agents
+### Data Layer
 
-### 1. LIQ Supervisor Agent
+- Pulls raw metrics (TVL, APYs, liquidity, price feeds) from providers like DeFi Llama or other aggregator services.
+- Stores both raw and processed data in Pinecone Vector DB for historical lookups and vector-based queries (e.g., similarity searches).
 
-The LIQ Supervisor Agent serves as the central decision-making entity in the system, coordinating all interactions between agents. It manages task delegation and workflow orchestration while handling error recovery to maintain system resilience. Through its comprehensive oversight, it ensures smooth operation of all system components.
+### Analysis Layer
 
-### 2. Market Agent
+- Market Analyzer: Aggregates on-chain data, focusing on 2-week intervals to spot yield trends, stable APYs, or sudden shifts.
+- Performance Analyzer: Evaluates existing strategies (did they meet target APY? Any liquidation events?).
+- Risk Analyzer: Takes combined outputs, checks for protocol health (liquidity), potential high-volatility assets, or over-leveraging.
 
-The Market Agent focuses on collecting and analyzing real-time market data across multiple DeFi protocols. It continuously identifies trends, monitors liquidity levels, and tracks key metrics to generate comprehensive market condition reports. Through its interface with various DeFi protocols, it maintains an up-to-date view of market conditions.
+### Orchestration Layer
 
-### 3. Performance Agent
+- Strategy Generator: Synthesizes final multi-step plans (supply, borrow, repay, etc.) under user-defined rules (e.g., "≥80% stablecoin exposure," "≤2x leverage").
+- Event Manager: Coordinates scheduled tasks (like "run every Monday") or responds to external triggers.
 
-This specialized agent conducts thorough analysis of historical strategy performance, maintaining detailed tracking of success rates and ROI. It excels at identifying strategy anomalies and provides valuable optimization recommendations based on comprehensive performance data analysis.
+### Deployment Layer
 
-### 4. Risk Agent
+- Liquid Protocol Integration: Once a strategy is approved, the agent deploys it on Base, interacting with the Liquid Protocol's smart contracts.
+- Blockchain Execution: Actual transactions occur here (deposit collateral, borrow tokens, etc.).
 
-The Risk Agent performs continuous assessment of risks based on current market conditions and historical data. It employs a sophisticated classification system for risk levels (Low, Medium, High) while providing detailed risk mitigation recommendations. Through constant monitoring of system health, it helps maintain optimal risk management.
+### Monitoring & Feedback
 
-### 5. Strategy Agent
+- Continuous monitoring of deployed strategies.
+- Logs updated metrics into Pinecone DB.
+- Provides real-time or scheduled updates to users (via UI, Telegram mini app, or API).
 
-Taking responsibility for strategy development, this agent generates and refines DeFi strategies while monitoring their deployment. It maintains careful tracking of performance metrics and implements weekly strategy updates to ensure optimal performance in changing market conditions.
+### System Architecture
 
-## Core Tools & Integrations
+Below is a detailed visualization of how different components interact:
 
-### 1. LangGraph & LangChain
+![System Architecture](paste.png)
 
-These core technologies manage the complex workflow and orchestration of all agents within the system. They handle comprehensive state management and agent interactions while providing robust tool integration and prompt handling capabilities for smooth system operation.
+#### Sequence Flow
 
-### 2. Vector Database (Pinecone)
+The following sequence diagram shows the detailed interaction flow between components:
 
-Pinecone serves as the system's memory, storing crucial strategy and market data for quick retrieval. The database enables sophisticated pattern recognition and maintains detailed performance history while supporting comprehensive risk analysis through its vector search capabilities.
+{{sequence-diagram}}
 
-### 3. DeFi Llama
+### Workflow Overview
 
-This integration provides essential protocol data aggregation and market analysis support for the system. It delivers crucial performance metrics tracking and assists in thorough risk assessment through its comprehensive protocol data coverage.
+#### System Architecture & Workflow Diagram
 
-### 4. Liquid Protocol
+Below is the high-level system architecture showing how different components interact:
 
-As the foundational DeFi infrastructure, the Liquid Protocol enables sophisticated strategy deployment and provides a robust decentralized execution framework for all system operations.
+![System Architecture](paste.png)
 
-## Getting Started
+#### Sequence Flow
 
-### Prerequisites
+The following sequence diagram illustrates the detailed interaction flow between components:
 
-- Python 3.8+
-- Required API keys and credentials for:
-  - DeFi services
-  - Pinecone
-  - OpenAI
-  - Additional integrations
+```mermaid
+sequenceDiagram
+    participant DL as DeFi Llama
+    participant MA as Market Analyzer
+    participant PA as Performance Analyzer
+    participant PDB as Pinecone VectorDB
+    participant RA as Risk Analyzer
+    participant SG as Strategy Generator
+    participant BC as Blockchain
 
-### Basic Setup
+    par Market Analysis
+        DL->>MA: Fetch onchain data
+        MA->>PDB: Store market data
+        MA->>MA: Analyze last 2 weeks data
+    and Performance Analysis
+        PA->>PDB: Fetch previous strategy data
+        Note over PA: Analyze strategy performance
+        Note over PA: Check previous week's strategy
+    end
 
-1. Install dependencies from requirements.txt
-2. Configure environment variables
-3. Run the system through the supervisor agent
+    par Risk Assessment
+        MA->>RA: Send market analysis
+        PA->>RA: Send performance analysis
+        RA->>RA: Assess potential risks
+        RA->>SG: Send risk-analyzed data
+        SG->>SG: Generate multi-step strategy
+        Note over SG: Create Borrow/Supply/Repay/Withdraw steps
+        SG->>BC: Deploy strategy
+        SG->>PDB: Store strategy data
+        Note over SG: Strategy Constraints
+        Note over SG: USDC: 80% lending, 95% stablecoin
+        Note over SG: WETH: 60% lending, 2x max leverage
+    end
 
-## System Architecture (WIP)
+    loop Continuous Monitoring
+        PA->>BC: Monitor deployed strategies
+        PA->>PDB: Update performance metrics
+    end
+```
 
-LiqAI operates as a distributed, multi-agent system with the LIQ Supervisor Agent at its core. The system coordinates specialized agents working in parallel, integrating with external APIs and data sources to execute and optimize DeFi strategies.
+#### Process Steps
+
+1. Fetch Data: Retrieve on-chain stats, store them in Pinecone (alongside older data for historical context).
+2. Parallel Analysis:
+   - Market: Evaluate yields, volatility.
+   - Performance: Check existing strategies' success/failure.
+   - Risk Check: Integrate both analyses into a risk profile.
+3. Strategy Generation: Build or adjust strategies (borrow/supply, stablecoin or leveraged positions).
+4. Deploy: Publish final steps on Base using the Liquid Protocol.
+5. Monitor & Iterate: Keep watch for changes, generate a performance report, and potentially re-tune after a set interval.
+
+### Core Tools & Integrations
+
+1. LangGraph & LangChain
+   These core technologies manage the complex workflow and orchestration of all agents within the system. They handle comprehensive state management and agent interactions while providing robust tool integration and prompt handling capabilities for smooth system operation.
+
+2. Vector Database (Pinecone)
+   Pinecone serves as the system's memory, storing crucial strategy and market data for quick retrieval. The database enables sophisticated pattern recognition and maintains detailed performance history while supporting comprehensive risk analysis through its vector search capabilities.
+
+3. DeFi Llama
+   This integration provides essential protocol data aggregation and market analysis support for the system. It delivers crucial performance metrics tracking and assists in thorough risk assessment through its comprehensive protocol data coverage.
+
+4. Liquid Protocol
+   As the foundational DeFi infrastructure, the Liquid Protocol enables sophisticated strategy deployment and provides a robust decentralized execution framework for all system operations.
+
+5. AWS Bedrock
+
+### Example Flow
+
+Here is a simplified scenario:
+
+Monday 00:00 UTC:
+
+- A scheduled task triggers the Market Analyzer to gather data from DeFi Llama for the previous 2 weeks.
+- Performance Analyzer checks if last week's strategies performed well or faced any liquidations.
+- Both results feed into the Risk Analyzer, which flags any concerns.
+
+Strategy Generator:
+
+- Finds an updated USDC yield farm offering 5% APY with low risk.
+- Decides to shift a portion of the user's stablecoin holdings there.
+- For WETH, identifies a slight drop in volatility, so a 1.5x leverage strategy might be prudent.
+
+Deployment:
+
+- The new multi-step plan is deployed: "Supply USDC → Borrow small portion → Re-supply stablecoin to gain better yield."
+- On the WETH side: "Deposit WETH → Borrow WETH → Re-deposit to earn yield," respecting a max of 2x leverage.
+
+Monitoring:
+
+For the rest of the week, the system continuously tracks performance, logs data in Pinecone, and stands by for next Monday's in-depth analysis or urgent triggers if markets drastically change.
+
+### Future Directions
+
+Advanced Risk Modeling
+
+- Incorporating volatility measures and real-time liquidation risk in the agent's calculations.
+
+Social Graph & User Profiles
+
+- Users can follow top-performing strategies or "curators," building a social layer around strategy sharing.
+
+Multi-Chain Expansion
+
+- Integrate additional L2s or other EVM chains for broader yield opportunities.
+
+Adaptive Strategies
+
+- Auto-balancing or reallocation triggers, minimizing user manual interventions even further.
+
+Mini Telegram App
+
+- Chat-based interface to query performance stats or tweak leverage on the fly.
+
+### Getting Started
+
+Clone the Repo
+
+```bash
+git clone https://github.com/metastable-labs/LiqAI.git
+cd LiqAI
+```
+
+Install Dependencies
+
+```bash
+npm install
+# or
+pip install -r requirements.txt
+```
+
+Configure Environment
+
+Create a .env file for Pinecone, DeFi Llama, or other keys.
+Example:
+
+```makefile
+PINECONE_API_KEY=xxxx
+DEFI_LLAMA_API_KEY=xxxx
+```
+
+Run
+
+```bash
+npm start
+# or
+python main.py
+```
+
+Observe
+
+Monitor console logs or any local dashboards to see how the system is fetching data and generating strategies.
+
+## Contributing
+
+Contributions of all sizes are welcome:
+
+- Bug Reports/Feature Requests: Submit via GitHub Issues.
+- Pull Requests: Fork the repo, create a feature branch, push changes, and open a PR.
+- Discussion: Join our community channels (Discord, Telegram) to brainstorm ideas and get support.
+
+Please ensure consistency with code formatting/linting rules before submitting a PR.
 
 ## Disclaimer
 
