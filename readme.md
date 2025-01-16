@@ -2,7 +2,7 @@
 
 Liquid AI Agent Curator is an automated system that acts as a DeFi strategy curator, analyzing market conditions to create and optimize yield strategies for USDC and WETH on Base using the Liquid protocol. The system leverages artificial intelligence to generate multi-step strategies while continuously monitoring performance and managing risk.
 
-## System Overview
+## Overview
 
 DeFi (Decentralized Finance) has unlocked a world of opportunities—yield farming, lending, borrowing, liquidity mining—but it remains complex for many. Managing multiple protocols, keeping track of TVL changes, APYs, and risk metrics demands considerable time and expertise.
 
@@ -19,7 +19,7 @@ The Liquid AI Agent Curator exists to bridge this gap, providing:
 - Reducing complexity: Users often juggle multiple tabs, wallets, yield calculators, etc. Automated workflows streamline the entire cycle—from data collection to final deployment.
 - Enhancing accessibility: By providing a user-friendly AI agent, new entrants can safely experience DeFi without needing in-depth expertise about lending, leveraging, or risk management.
 
-## Protocol & Architecture Design
+## Components
 
 Below is a breakdown of major layers and modules in the Liquid AI Agent Curator:
 
@@ -50,31 +50,12 @@ Below is a breakdown of major layers and modules in the Liquid AI Agent Curator:
 - Logs updated metrics into Pinecone DB.
 - Provides real-time or scheduled updates to users (via UI, Telegram mini app, or API).
 
-### System Architecture
+### System Workflow
 
-Below is a detailed visualization of how different components interact:
-
-![System Architecture](paste.png)
-
-#### Sequence Flow
-
-The following sequence diagram shows the detailed interaction flow between components:
-
-{{sequence-diagram}}
-
-### Workflow Overview
-
-#### System Architecture & Workflow Diagram
-
-Below is the high-level system architecture showing how different components interact:
-
-![System Architecture](paste.png)
-
-#### Sequence Flow
-
-The following sequence diagram illustrates the detailed interaction flow between components:
+The following sequence diagram illustrates the detailed interaction flow between system components:
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'mainBkg': '#ffffff', 'nodeBkg': '#ffffff', 'noteTextColor': '#000000', 'noteBkgColor': '#fff9b0', 'messageBorderColor': '#000000', 'messageTextColor': '#000000'}}}%%
 sequenceDiagram
     participant DL as DeFi Llama
     participant MA as Market Analyzer
@@ -193,8 +174,8 @@ Mini Telegram App
 Clone the Repo
 
 ```bash
-git clone https://github.com/metastable-labs/LiqAI.git
-cd LiqAI
+git clone https://github.com/YOUR-ORG/liquid-ai-agent.git
+cd liquid-ai-agent
 ```
 
 Install Dependencies
@@ -211,8 +192,12 @@ Create a .env file for Pinecone, DeFi Llama, or other keys.
 Example:
 
 ```makefile
-PINECONE_API_KEY=xxxx
-DEFI_LLAMA_API_KEY=xxxx
+OPENAI_API_KEY=xxxxxxxxx
+PINECONE_INDEX_NAME=liq-ai
+PINECONE_API_KEY=xxxxxxxxx
+PINECONE_ENVIRONMENT=us-east-1
+PRIVATE_KEY=xxxxxxxxxxxxx
+BASE_RPC_URL=https://base-mainnet.infura.io/v3/xxxxxxxxxxxxxxxxxxx
 ```
 
 Run
