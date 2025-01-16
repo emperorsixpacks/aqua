@@ -111,6 +111,7 @@ For the rest of the week, the system continuously tracks performance, logs data 
 
 ## Roadmap (not in order):
 - [ ] Character/personailty building into **Yuki**
+- [ ] Strategy prompting - Enable us(Liquid team) create strategies every week via a prompt interface
 - [ ] Risk Modelling: Incorporating volatility measures and real-time liquidation risk in the agent's calculations.
 - [ ] Auto-balancing or reallocation triggers, minimizing user manual interventions even further.
 - [ ] Ability for anyone to create their own Liquid Agents
