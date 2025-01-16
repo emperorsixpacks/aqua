@@ -134,15 +134,13 @@ Mini Telegram App
 Clone the Repo
 
 ```bash
-git clone https://github.com/YOUR-ORG/liquid-ai-agent.git
-cd liquid-ai-agent
+git clone https://github.com/metastable-labs/LiqAI.git
+cd LiqAI
 ```
 
 Install Dependencies
 
 ```bash
-npm install
-# or
 pip install -r requirements.txt
 ```
 
@@ -163,7 +161,7 @@ BASE_RPC_URL=https://base-mainnet.infura.io/v3/xxxxxxxxxxxxxxxxxxx
 Run
 
 ```bash
-python main.py
+python agent.py
 ```
 
 Observe
