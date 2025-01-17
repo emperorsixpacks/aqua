@@ -6,7 +6,7 @@ Aqua is a framework for creating Liquid agents, Liquid Agents acts as a DeFi str
 
 DeFi (Decentralized Finance) has unlocked a world of opportunities yield farming, lending, borrowing, liquidity mining but it remains complex for many. Managing multiple protocols, keeping track of TVL changes, APYs, and risk metrics demands considerable time and expertise.
 
-Introducing **Yuki**, Our flagship Liquid Agent, **Yuki** is an autonomous entities designed to manage and curate strategies starting with USDC and WETH. Liquid Agents leverage advanced AI-driven insights to optimize both strategy creation and execution, while operating strictly within predefined risk and reward parameters to ensure responsible management.
+Introducing **Yuki**, Our flagship Liquid Agent, **Yuki** is an autonomous entities designed to manage and curate strategies starting with USDC and WETH. Yuki leverages advanced AI-driven insights to optimize both strategy creation and execution, while operating strictly within predefined risk and reward parameters to ensure responsible management.
 
 **Yuki** exists to bridge this gap, providing:
 
