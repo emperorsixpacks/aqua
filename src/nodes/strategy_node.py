@@ -16,6 +16,7 @@ async def generate_strategy(state: dict) -> dict:
         risk_analysis = state.get("risk_analysis", "")
         asset = state.get("asset")
         protocol = state.get("protocol")
+        review_instructions = state.get("review_instructions", "")
 
         protocol_config = PROTOCOLS_CONFIG[protocol]
         strategy_config = STRATEGY_CONFIG.get(asset.lower(), {})
@@ -39,6 +40,9 @@ async def generate_strategy(state: dict) -> dict:
                 connector=CONNECTORS[protocol]
             ))
         ]
+
+        if review_instructions:
+            messages.append(HumanMessage(content=f"User instructions: {review_instructions}"))
         strategy_response = await model.ainvoke(messages)
        
         state["messages"] = state.get("messages", []) + [

@@ -13,7 +13,7 @@ class PerformanceService:
     Service to manage strategies: saving, updating performance, fetching, and querying.
     """
     @staticmethod
-    def get_latest_performance_data() -> Dict:
+    async def get_latest_performance_data() -> Dict:
         """
         Fetch latest performance data.
 

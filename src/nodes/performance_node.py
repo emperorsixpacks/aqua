@@ -9,7 +9,7 @@ logger = logging.getLogger("performance_node")
 
 async def analyze_performance(state: dict) -> dict:
     try:
-        performance_data = PerformanceService.get_latest_performance_data()
+        performance_data =await PerformanceService.get_latest_performance_data()
 
         logger.info(f"Fetched historical performance data successfully: {performance_data}")
 

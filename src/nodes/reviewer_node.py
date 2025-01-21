@@ -6,27 +6,16 @@ import logging
 
 logger = logging.getLogger("reviewer_node")
 logger.setLevel(logging.INFO)
-async def reviewer(state: AgentState) -> Command:
-    try:
-        human_message = interrupt({
-            "question": "Please review the generated strategy and provide feedback or approve to deploy.",
-            "strategy": state.get("strategy_signals", "No strategy generated yet.")
-        })
-        logger.info(f"Human review input received: {human_message}")
 
-        state.setdefault("messages", []).append(
-            HumanMessage(content=human_message)
-        )
+async def reviewer(state: AgentState):
+    result = interrupt({
+        "task": "Please review the strategy and provide instructions for improvement or approval.",
+        "strategy": state.get("strategy_signals", "No strategy generated."),
+    })
 
-        if "approve" in human_message.lower():
-            logger.info("Human approved the strategy. Proceeding to deployment.")
-            return Command(goto="deploy", update={"review_feedback": human_message})
-        else:
-            logger.info("Human requested changes. Routing back to strategy generation.")
-            return Command(goto="generate_strategy", update={"review_feedback": human_message})
+    user_instructions = result.get("review_instructions", "").strip()
+    logger.info(f"User instructions received: {user_instructions}")
 
-    except Exception as e:
-        logger.error(f"Error in reviewer: {e}", exc_info=True)
-        state.setdefault("messages", []).append(
-            AIMessage(content="An error occurred while processing your review. Please try again."))
-        return Command(goto="error_handler")
+    return {
+        "review_instructions": user_instructions
+    }

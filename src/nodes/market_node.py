@@ -9,7 +9,7 @@ logger = logging.getLogger("market_node")
 
 async def analyze_market(state: dict) -> dict:
     try:
-        market_data = MarketService.get_latest_market_data()
+        market_data = await MarketService.get_latest_market_data()
         logger.info(f"Fetched market data successfully: {market_data}")
 
         model = ChatOpenAI(

@@ -21,6 +21,7 @@ async def deploy(state: dict) -> dict:
             AIMessage(content="Strategy successfully deployed."),
             AIMessage(content=f"Deployed strategy: {strategy_content}")
         ]
+        
         state["deployment_status"] = "success"
 
         return state
