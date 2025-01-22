@@ -15,7 +15,5 @@ async def reviewer(state: AgentState):
 
     user_instructions = result.get("review_instructions", "").strip()
     logger.info(f"User instructions received: {user_instructions}")
-
-    return {
-        "review_instructions": user_instructions
-    }
+    state["review_instructions"] = user_instructions
+    return state

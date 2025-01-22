@@ -16,4 +16,5 @@ class AgentState(TypedDict):
     risk_analysis: Annotated[Dict, operator.ior]
     performance_metrics: Annotated[Dict, operator.ior]
     strategy_signals: Annotated[Dict, operator.ior]
+    review_instructions: str
 
