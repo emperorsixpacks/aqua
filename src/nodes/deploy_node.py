@@ -13,13 +13,13 @@ async def deploy(state: dict) -> dict:
         if not strategy_response:
             raise ValueError("No strategy available for deployment.")
 
-        strategy_content = json.loads(strategy_response.content)
+        strategy_content = json.loads(strategy_response.get("content", "{}"))
         await PerformanceService.save_strategy(strategy_content)
         await schedule_strategy_deployment(strategy_content)
 
         state["messages"] = state.get("messages", []) + [
             AIMessage(content="Strategy successfully deployed."),
-            AIMessage(content=f"Deployed strategy: {strategy_content}")
+            AIMessage(content=f"Deployed strategy: {json.dumps(strategy_content, indent=2)}")
         ]
         
         state["deployment_status"] = "success"
@@ -28,7 +28,6 @@ async def deploy(state: dict) -> dict:
 
     except Exception as e:
         logger.error(f"Error during strategy deployment: {e}", exc_info=True)
-
         state["messages"] = state.get("messages", []) + [
             AIMessage(content="Error during strategy deployment. Please try again later.")
         ]
