@@ -1,15 +1,15 @@
 import logging
-from src.config.llm_config import CREATIVE_TEMPERATURE, DEFAULT_TEMPERATURE, GPT3_5_MODEL
+from app.config.llm_config import CREATIVE_TEMPERATURE, DEFAULT_TEMPERATURE, GPT3_5_MODEL
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from src.prompts.performance_prompts import PerformanceAnalysisPrompt
-from src.services.performance_service import PerformanceService
+from app.prompts.performance_prompts import PerformanceAnalysisPrompt
+from app.services.performance_service import PerformanceService
 
 logger = logging.getLogger("performance_node")
 
 async def analyze_performance(state: dict) -> dict:
     try:
-        performance_data = PerformanceService.get_latest_performance_data()
+        performance_data = await PerformanceService.get_latest_performance_data()
 
         logger.info(f"Fetched historical performance data successfully: {performance_data}")
 

@@ -1,16 +1,12 @@
-import json
 import logging
-from src.jobs.strategy_job import schedule_strategy_deployment
-from src.services.performance_service import PerformanceService
-from src.config.llm_config import GPT3_5_MODEL
+from app.config.llm_config import GPT3_5_MODEL
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from src.prompts.strategy_prompts import StrategyGenerationPrompt
-from src.config.min_deposits import MIN_DEPOSITS
-from src.config.protocols_config import PROTOCOLS_CONFIG
-from src.config.strategy_config import STRATEGY_CONFIG
-from src.config.addresses_config import CONNECTORS, BASE_TOKENS
-
+from app.prompts.strategy_prompts import StrategyGenerationPrompt
+from app.config.min_deposits import MIN_DEPOSITS
+from app.config.protocols_config import PROTOCOLS_CONFIG
+from app.config.strategy_config import STRATEGY_CONFIG
+from app.config.addresses_config import CONNECTORS, BASE_TOKENS
 
 logger = logging.getLogger("strategy_node")
 
@@ -20,17 +16,15 @@ async def generate_strategy(state: dict) -> dict:
         risk_analysis = state.get("risk_analysis", "")
         asset = state.get("asset")
         protocol = state.get("protocol")
-
+        review_instructions = state.get("review_instructions", "")
         protocol_config = PROTOCOLS_CONFIG[protocol]
         strategy_config = STRATEGY_CONFIG.get(asset.lower(), {})
         base_token_address = BASE_TOKENS[asset]
         min_deposit = MIN_DEPOSITS.get(asset, "0")
 
         markets = protocol_config["addresses"]["markets"]
-        model = ChatOpenAI(
-            model=GPT3_5_MODEL
-        )
-        
+        model = ChatOpenAI(model=GPT3_5_MODEL)
+
         messages = [
             SystemMessage(content=StrategyGenerationPrompt.get_system_prompt()),
             HumanMessage(content=StrategyGenerationPrompt.get_human_prompt(
@@ -45,23 +39,23 @@ async def generate_strategy(state: dict) -> dict:
                 connector=CONNECTORS[protocol]
             ))
         ]
-        model = ChatOpenAI(model=GPT3_5_MODEL)
+
+        if review_instructions:
+            review_instruction_message = HumanMessage(content=f"Consider the following review instructions: {review_instructions}")
+            messages.append(review_instruction_message)
+            state["review_instructions"] = ""
+
         strategy_response = await model.ainvoke(messages)
-
-        strategy_content = strategy_response.content
-        parsed_strategy = json.loads(strategy_content)
-
-        await PerformanceService.save_strategy(parsed_strategy)
-        await schedule_strategy_deployment(parsed_strategy)
-
+       
         state["messages"] = state.get("messages", []) + [
-            AIMessage(content=f"Generated DeFi strategy: {strategy_response}"),
-            AIMessage(content="Strategy deployment has been scheduled and will be processed shortly.")
+            AIMessage(content=f"Generated DeFi strategy: {strategy_response}")
         ]
         state["strategy_signals"] = strategy_response
         return state
     
     except Exception as e:
         logger.error(f"Error generating DeFi strategy: {e}", exc_info=True)
-        state["messages"] = state.get("messages", []) + [AIMessage(content="Error generating DeFi strategy. Please try again later.")]
+        state["messages"] = state.get("messages", []) + [
+            AIMessage(content="Error generating DeFi strategy. Please try again later.")
+        ]
         return state

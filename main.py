@@ -1,6 +1,6 @@
 import asyncio
 import uuid
-from src.graph import create_graph 
+from app.graph import create_graph 
 
 async def main():
     graph = create_graph()

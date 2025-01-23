@@ -1,5 +1,5 @@
 import logging
-from src.services.market_service import MarketService
+from app.services.market_service import MarketService
 
 logger = logging.getLogger("market_job")
 logging.basicConfig(level=logging.INFO)
@@ -20,8 +20,8 @@ class MarketDataJob:
             market_data = await MarketService.fetch_market_data()
             
             if market_data:
-                MarketService.save_market_data(market_data)
-                logger.info("Market data saved successfully!")
+                await MarketService.save_market_data(market_data)
+                logger.info("Market data saved successfully!", market_data)
             else:
                 logger.warning("No market data to save.")
 

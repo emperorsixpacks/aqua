@@ -9,5 +9,6 @@ langgraph
 pydantic>=2.7.4
 python-dotenv
 pinecone
+pinecone-client
 apscheduler
 langchain-pinecone>=0.0.2

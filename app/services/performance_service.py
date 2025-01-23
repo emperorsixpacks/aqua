@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional
-from src.services.vector_service import VectorService
+from app.services.vector_service import VectorService
 
 
 logger = logging.getLogger("PERFORMANCE_SERVICE")
@@ -13,7 +13,7 @@ class PerformanceService:
     Service to manage strategies: saving, updating performance, fetching, and querying.
     """
     @staticmethod
-    def get_latest_performance_data() -> Dict:
+    async def get_latest_performance_data() -> Dict:
         """
         Fetch latest performance data.
 
@@ -21,7 +21,7 @@ class PerformanceService:
             Dict: The most recent performance data.
         """
         try:
-            results = VectorService.natural_query("Latest performance data", limit=1)
+            results = await VectorService.natural_query("Latest performance data", limit=1,min_score=0.5)
             logger.info(f"Natural query results: {results}")
 
             if results:
@@ -88,7 +88,7 @@ class PerformanceService:
             logger.error(f"Error saving strategy: {e}")
 
     @staticmethod
-    def update_strategy(strategy_id: str, update_data: Dict) -> None:
+    async def update_strategy(strategy_id: str, update_data: Dict) -> None:
         """
         Update the performance metrics of a saved strategy.
 
@@ -119,7 +119,7 @@ class PerformanceService:
             logger.error(f"Error updating strategy performance: {e}")
 
     @staticmethod
-    def fetch_strategy(strategy_id: str) -> Optional[Dict]:
+    async def fetch_strategy(strategy_id: str) -> Optional[Dict]:
         """
         Fetch a strategy along with its performance data.
 
@@ -145,7 +145,7 @@ class PerformanceService:
             return None
 
     @staticmethod
-    def fetch_strategies(filter_criteria: Optional[Dict] = None, limit: int = 10) -> List[Dict]:
+    async def fetch_strategies(filter_criteria: Optional[Dict] = None, limit: int = 10) -> List[Dict]:
         """
         Fetch saved strategies from Pinecone using metadata filtering.
 
@@ -167,7 +167,7 @@ class PerformanceService:
             return []
 
     @staticmethod
-    def query_strategies(query: str, limit: int = 5) -> List[Dict]:
+    async def query_strategies(query: str, limit: int = 5) -> List[Dict]:
         """
         Query Pinecone for strategies using a plain English query.
 
@@ -180,7 +180,7 @@ class PerformanceService:
         """
         try:
             logger.info(f"Querying strategies with plain English: '{query}'")
-            strategies = VectorService.natural_query(query=query, limit=limit)
+            strategies = VectorService.natural_query(query=query, limit=limit, min_score=0.1)
             logger.info(f"Found {len(strategies)} strategies matching the query: '{query}'")
             return strategies
 

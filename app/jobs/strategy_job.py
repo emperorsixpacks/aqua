@@ -1,8 +1,8 @@
 from datetime import datetime
 import logging
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from src.evm.strategy import deploy_strategy_onchain
-from src.config.addresses_config import STRATEGY_ADDRESS
+from app.evm.strategy import deploy_strategy_onchain
+from app.config.addresses_config import STRATEGY_ADDRESS
 import asyncio
 
 logger = logging.getLogger("strategy_job")

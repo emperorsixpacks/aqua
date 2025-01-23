@@ -1,9 +1,9 @@
 import json
 import logging
 from typing import Dict
-from src.services.vector_service import VectorService
-from src.providers.defi_llama_provider import get_market_data
-from src.providers.types.market_types import MarketData
+from app.services.vector_service import VectorService
+from app.providers.defi_llama_provider import get_market_data
+from app.providers.types.market_types import MarketData
 
 
 logger = logging.getLogger("MARKET_SERVICE")
@@ -15,7 +15,7 @@ class MarketService:
     """
 
     @staticmethod
-    def validate_market_data(market_data: Dict) -> Dict:
+    async def validate_market_data(market_data: Dict) -> Dict:
         """
         Validates and sanitizes the structure of market data.
 
@@ -55,7 +55,7 @@ class MarketService:
                 from dataclasses import asdict
                 data = asdict(data)
 
-            return MarketService.validate_market_data(data)
+            return await MarketService.validate_market_data(data)
         except Exception as e:
             logger.error(f"Error fetching market data: {e}")
             return {}
@@ -92,7 +92,7 @@ class MarketService:
             raise
 
     @staticmethod
-    def get_latest_market_data() -> Dict:
+    async def get_latest_market_data() -> Dict:
         """
         Retrieves the latest market data from Pinecone.
 
@@ -100,7 +100,7 @@ class MarketService:
             Dict: The most recent market data.
         """
         try:
-            results = VectorService.natural_query("Latest market data", limit=1)
+            results = await VectorService.natural_query("Latest market data", limit=1, min_score=0.5)
             logger.info(f"Natural query results: {results}")
 
             if results:

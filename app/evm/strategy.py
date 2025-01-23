@@ -3,9 +3,9 @@ from typing import Dict, Any
 from web3 import Web3
 from eth_account import Account
 from eth_typing import Address
-from src.evm.client import public_client, wallet_client
-from src.evm.contracts.abis.strategy_abi import STRATEGY_ABI
-from src.types.strategy import ACTION_TYPES
+from app.evm.client import public_client, wallet_client
+from app.evm.contracts.abis.strategy_abi import STRATEGY_ABI
+from app.types.strategy import ACTION_TYPES
 
 async def deploy_strategy_onchain(
    strategy: Dict[str, Any],
