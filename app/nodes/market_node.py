@@ -1,9 +1,9 @@
 import logging
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from src.prompts.market_prompts import MarketAnalysisPrompt
-from src.services.market_service import MarketService
-from src.config.llm_config import CREATIVE_TEMPERATURE, GPT3_5_MODEL, DEFAULT_TEMPERATURE
+from app.prompts.market_prompts import MarketAnalysisPrompt
+from app.services.market_service import MarketService
+from app.config.llm_config import CREATIVE_TEMPERATURE, GPT3_5_MODEL, DEFAULT_TEMPERATURE
 
 logger = logging.getLogger("market_node")
 

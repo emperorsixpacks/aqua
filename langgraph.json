@@ -1,9 +1,11 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "Aqua": "./src/graph.py:create_graph"
+    "Aqua": "./app/graph.py:create_graph"
   },
   "env": ".env",
-  "python_version": "3.11",
-  "dependencies": ["."]
+  "python_version": "3.12",
+  "dependencies": [
+    "."
+  ]
 }

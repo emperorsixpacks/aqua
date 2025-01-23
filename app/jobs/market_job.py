@@ -1,5 +1,5 @@
 import logging
-from src.services.market_service import MarketService
+from app.services.market_service import MarketService
 
 logger = logging.getLogger("market_job")
 logging.basicConfig(level=logging.INFO)

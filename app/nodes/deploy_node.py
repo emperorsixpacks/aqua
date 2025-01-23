@@ -1,7 +1,7 @@
 import json
 import logging
-from src.services.performance_service import PerformanceService
-from src.jobs.strategy_job import schedule_strategy_deployment
+from app.services.performance_service import PerformanceService
+from app.jobs.strategy_job import schedule_strategy_deployment
 from langchain_core.messages import AIMessage
 
 logger = logging.getLogger("deploy_node")

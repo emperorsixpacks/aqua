@@ -1,10 +1,10 @@
 import asyncio
 import logging
 from typing import List, Dict, Any, Tuple
-from src.config.addresses_config import BASE_TOKENS
-from src.providers.types.common import PriceChange, RiskMetrics, Token
-from src.providers.types.market_types import CoinsResponse, Market, MarketData
-from src.utils.api_client import fetch_with_retry
+from app.config.addresses_config import BASE_TOKENS
+from app.providers.types.common import PriceChange, RiskMetrics, Token
+from app.providers.types.market_types import CoinsResponse, Market, MarketData
+from app.utils.api_client import fetch_with_retry
 
 API_ENDPOINTS = {
     "DEFI_LLAMA": "https://api.llama.fi",

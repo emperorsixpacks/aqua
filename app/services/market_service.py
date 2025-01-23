@@ -1,9 +1,9 @@
 import json
 import logging
 from typing import Dict
-from src.services.vector_service import VectorService
-from src.providers.defi_llama_provider import get_market_data
-from src.providers.types.market_types import MarketData
+from app.services.vector_service import VectorService
+from app.providers.defi_llama_provider import get_market_data
+from app.providers.types.market_types import MarketData
 
 
 logger = logging.getLogger("MARKET_SERVICE")

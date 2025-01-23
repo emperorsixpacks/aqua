@@ -1,7 +1,7 @@
 from langgraph.types import Command, interrupt
 from langgraph.graph.message import add_messages
 from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage, AIMessage
-from src.states import AgentState
+from app.states import AgentState
 import logging
 
 logger = logging.getLogger("reviewer_node")

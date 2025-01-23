@@ -1,12 +1,12 @@
 import logging
-from src.config.llm_config import GPT3_5_MODEL
+from app.config.llm_config import GPT3_5_MODEL
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from src.prompts.strategy_prompts import StrategyGenerationPrompt
-from src.config.min_deposits import MIN_DEPOSITS
-from src.config.protocols_config import PROTOCOLS_CONFIG
-from src.config.strategy_config import STRATEGY_CONFIG
-from src.config.addresses_config import CONNECTORS, BASE_TOKENS
+from app.prompts.strategy_prompts import StrategyGenerationPrompt
+from app.config.min_deposits import MIN_DEPOSITS
+from app.config.protocols_config import PROTOCOLS_CONFIG
+from app.config.strategy_config import STRATEGY_CONFIG
+from app.config.addresses_config import CONNECTORS, BASE_TOKENS
 
 logger = logging.getLogger("strategy_node")
 

@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime
 from typing import Dict, List, Optional
-from src.services.vector_service import VectorService
+from app.services.vector_service import VectorService
 
 
 logger = logging.getLogger("PERFORMANCE_SERVICE")

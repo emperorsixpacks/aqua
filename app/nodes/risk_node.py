@@ -1,8 +1,8 @@
 import logging
-from src.config.llm_config import CREATIVE_TEMPERATURE, DEFAULT_TEMPERATURE, GPT3_5_MODEL
+from app.config.llm_config import CREATIVE_TEMPERATURE, DEFAULT_TEMPERATURE, GPT3_5_MODEL
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from src.prompts.risk_prompts import RiskAssessmentPrompt
+from app.prompts.risk_prompts import RiskAssessmentPrompt
 
 logger = logging.getLogger("risk_node")
 

@@ -25,5 +25,7 @@ build/
 
 *.bak
 *.swp
-src/.DS_Store
+app..DS_Store
 .DS_Store
+build.sh
+playground.py
